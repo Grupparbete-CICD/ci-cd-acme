@@ -52,6 +52,7 @@ import Link from 'next/link';
             className='block md:hidden'
             alt="Screenshots of the dashboard project showing mobile version"
           />
+          <div><p>BAJS</p></div>
         </div>
       </div>
     </main>
