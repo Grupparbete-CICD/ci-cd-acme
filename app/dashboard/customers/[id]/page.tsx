@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
 import { CustomerForm } from '@/app/ui/customers/customer-form';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Customer Details',
@@ -43,7 +45,15 @@ export default async function CustomerPage({
   return (
     <main className="flex-1 p-6 md:p-10">
       <div className="flex items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Customer Profile</h1>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/dashboard/customers"
+            className="rounded-md border p-2 hover:bg-gray-100"
+          >
+            <ArrowLeftIcon className="w-5" />
+          </Link>
+          <h1 className={`${lusitana.className} text-2xl`}>Customer Profile</h1>
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
