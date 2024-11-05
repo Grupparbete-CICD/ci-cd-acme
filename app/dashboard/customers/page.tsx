@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 import { UserGroupIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Customers',
@@ -73,9 +74,11 @@ export default async function Page() {
                   </div>
 
                   <div className="mt-4 flex border-t pt-4">
-                    <button className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                      View Profile
-                    </button>
+                    <Link href={`/dashboard/customers/${customer.id}`}>
+                      <button className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        View Profile
+                      </button>
+                    </Link>
                   </div>
                 </div>
               ))}
