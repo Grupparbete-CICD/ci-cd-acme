@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Versionen av Node.js som ska användas
+          node-version: '18.18.2'  # Versionen av Node.js som ska användas
 
       - name: Install dependencies
         run: npm install  # Installerar projektets beroenden
