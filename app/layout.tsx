@@ -8,6 +8,7 @@ export const metadata: Metadata = {
         default: 'Acme Dashboard',
     },
     description: 'Acme is a fictional company used for demonstration purposes only.',
+    metadataBase: new URL('https://next-learn-dashboard.vercel.sh')
 }
 export default function RootLayout({
                                        children,
