@@ -7,7 +7,8 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "npx playwright test"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
@@ -19,6 +20,7 @@
     "clsx": "^2.0.0",
     "next": "^14.0.2",
     "next-auth": "^5.0.0-beta.5",
+    "openssl": "^2.0.0",
     "pg": "^8.13.1",
     "postcss": "8.4.31",
     "react": "18.2.0",
@@ -29,6 +31,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.2",
     "@types/bcrypt": "^5.0.1",
     "@types/pg": "^8.11.10",
     "@types/react": "18.2.21",
@@ -38,6 +41,7 @@
     "eslint": "^8.52.0",
     "eslint-config-next": "^14.0.0",
     "eslint-config-prettier": "9.0.0",
+    "playwright": "^1.48.2",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "0.5.4"
   },
