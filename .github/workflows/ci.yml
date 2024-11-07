@@ -1,0 +1,31 @@
+name: Playwright Test Workflow
+
+on:
+  push:
+    branches:
+      - main  # Körs när det sker en push till main-branchen
+  pull_request:
+    branches:
+      - main  # Körs vid pull requests mot main-branchen
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Versionen av Node.js som ska användas
+
+      - name: Install dependencies
+        run: npm install  # Installerar projektets beroenden
+
+      - name: Install Playwright Browsers
+        run: npx playwright install  # Installerar de webbläsare som krävs för Playwright
+
+      - name: Run Playwright tests
+        run: npm test  # Kör Playwright-testerna
