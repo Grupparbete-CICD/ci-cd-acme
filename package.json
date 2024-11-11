@@ -3,11 +3,13 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "generate-zip": "sh ./scripts/generate-zip.sh",
+    "lint": "next lint",
+    "next-install": "sh ./scripts/next-install.sh",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "start": "next start",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "lint": "next lint"
+    "start": "next start -p 8080"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
