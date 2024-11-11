@@ -24,8 +24,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET }}
-          application_name: nextjs-app
-          environment_name: prod
+          application_name: nextjs-app2
+          environment_name: Nextjs-app2-env
           version_label: nextjs-app-${{ github.run_number }}
           region: eu-north-1
           deployment_package: deploy.zip
