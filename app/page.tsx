@@ -51,7 +51,7 @@ export default function Page() {
             alt="Screenshots of the dashboard project showing mobile version"
           />
           <div>
-            <p>BAJS</p>
+            <p>Lowe - Test</p>
           </div>
         </div>
       </div>
