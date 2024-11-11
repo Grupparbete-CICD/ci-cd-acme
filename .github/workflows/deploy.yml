@@ -41,7 +41,7 @@ jobs:
 
     #   - uses: actions/checkout@v4
 
-    #   - name: Generate deployment package
+    #   - name: Generate deployment packageqwe
     #     env:
     #       POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
     #       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
