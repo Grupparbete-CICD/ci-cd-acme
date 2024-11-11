@@ -5,9 +5,7 @@ import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
-/* BAJSKORV
- */export default function Page() {
+export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
@@ -42,17 +40,19 @@ import Link from 'next/link';
             src="/hero-desktop.png"
             width={1000}
             height={760}
-            className='hidden md:block'
+            className="hidden md:block"
             alt="Screenshots of the dashboard project showing desktop version"
           />
           <Image
             src="/hero-mobile.png"
             width={560}
             height={620}
-            className='block md:hidden'
+            className="block md:hidden"
             alt="Screenshots of the dashboard project showing mobile version"
           />
-          <div><p>BAJS</p></div>
+          <div>
+            <p>BAJS</p>
+          </div>
         </div>
       </div>
     </main>
