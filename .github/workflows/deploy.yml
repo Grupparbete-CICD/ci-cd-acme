@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      #   - uses: actions/setup-node@v4
-      #     with:
-      #       node-version: '14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
       - name: Generate deployment package
         run: npm run next-install && npm run generate-zip
