@@ -16,12 +16,6 @@ jobs:
       #     with:
       #       node-version: '14'
 
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-
       - name: Generate deployment package
         run: npm run next-install && npm run generate-zip
 
@@ -32,6 +26,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET }}
           application_name: nextjs-app
           environment_name: prod
-          version_label: nextjs-app-${{ steps.buildnumber.outputs.build_number }}
+          version_label: nextjs-app-${{ github.run_number }}
           region: eu-north-1
           deployment_package: deploy.zip
