@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
       - name: Generate deployment package
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_URL: ${{ secrets.AUTH_URL }}
         run: npm run next-install && npm run generate-zip
 
       - name: Deploy to EB
