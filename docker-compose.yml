@@ -1,0 +1,9 @@
+app:
+    image: 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
+    ports:
+      - '3000:3000'
+    environment:
+      POSTGRES_URL: ${POSTGRES_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_URL: ${AUTH_URL}
+    command: npm start

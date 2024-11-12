@@ -27,20 +27,13 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # Debug step to check AWS_ACCOUNT_ID (remove this in production)
-      - name: Check AWS Account ID
-        env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-        run: |
-          echo "AWS Account ID is: $AWS_ACCOUNT_ID"
-
       # Build, tag, and push Docker image
       - name: Build, tag, and push Docker image
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
-          IMAGE_TAG=$(date +%Y%m%d%H%M%S)
-          REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env
+          IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Generate a unique tag based on date
+          REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajskerv
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $REPOSITORY_URI:$IMAGE_TAG .
           docker push $REPOSITORY_URI:$IMAGE_TAG
