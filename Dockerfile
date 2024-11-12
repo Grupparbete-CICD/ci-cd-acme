@@ -1,16 +1,19 @@
-FROM node:16-alpine AS builder
+# Använd Node.js Alpine som basbild
+FROM node:20-alpine
+# Installera Nginx och supervisor
+RUN apk update && apk add --no-cache nginx supervisor
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+# Kopiera package.json och installera beroenden
+COPY package*.json ./
+RUN npm install
+# Kopiera hela projektet
 COPY . .
-RUN yarn build
-
-FROM node:16-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV production
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+# Bygg Next.js-applikationen
+RUN npm run build
+# Kopiera Nginx och supervisor konfiguration
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Öppna port 3000
 EXPOSE 3000
-CMD ["yarn", "start"]
+# Starta supervisord som hanterar både Next.js och Nginx
+CMD ["/usr/bin/supervisord"]
