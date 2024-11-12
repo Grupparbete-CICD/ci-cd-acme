@@ -29,9 +29,10 @@ jobs:
 
       # Debug step to check AWS_ACCOUNT_ID (remove this in production)
       - name: Check AWS Account ID
-        run: echo "AWS Account ID is: $AWS_ACCOUNT_ID"
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        run: |
+          echo "AWS Account ID is: $AWS_ACCOUNT_ID"
 
       # Build, tag, and push Docker image
       - name: Build, tag, and push Docker image
