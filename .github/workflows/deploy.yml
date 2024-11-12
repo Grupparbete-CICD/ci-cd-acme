@@ -3,7 +3,7 @@ name: Deploy to Elastic Beanstalk
 on:
   push:
     branches:
-      - main  # Ändra till den branch du vill ska trigga deployment
+      - main  # Change to the branch you want to trigger deployment
 
 jobs:
   deploy:
@@ -26,6 +26,12 @@ jobs:
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      # Debug step to check AWS_ACCOUNT_ID (remove this in production)
+      - name: Check AWS Account ID
+        run: echo "AWS Account ID is: $AWS_ACCOUNT_ID"
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
       # Build, tag, and push Docker image
       - name: Build, tag, and push Docker image
