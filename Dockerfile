@@ -1,23 +1,40 @@
 FROM node:20-alpine
 
+# Installera Nginx och supervisor
+RUN apk update && apk add --no-cache nginx supervisor
+
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Kopiera package.json och installera beroenden
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application
+# Kopiera resten av applikationen
 COPY . .
 
-# Set environment variables for the build
+# Sätt bygg-argument och miljövariabler
+ARG BUILD_PHASE=false
+ARG POSTGRES_URL
+ARG AUTH_SECRET
+ARG AUTH_URL
+ENV BUILD_PHASE=${BUILD_PHASE}
+ENV POSTGRES_URL=${POSTGRES_URL}
+ENV AUTH_SECRET=${AUTH_SECRET}
+ENV AUTH_URL=${AUTH_URL}
 ENV NODE_ENV=production
-ENV BUILD_PHASE=true
 
-# Build the application
+# Logga miljövariabler för felsökning
+RUN echo "BUILD_PHASE=${BUILD_PHASE}" && echo "POSTGRES_URL=${POSTGRES_URL}" && echo "AUTH_URL=${AUTH_URL}" && echo "NODE_ENV=${NODE_ENV}"
+
+# Bygg applikationen
 RUN npm run build
 
-# Expose port
+# Kopiera konfigurationsfiler
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Exponera port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Starta supervisord
+CMD ["/usr/bin/supervisord"]

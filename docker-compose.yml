@@ -1,3 +1,4 @@
+services:
 app:
     image: 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
     ports:

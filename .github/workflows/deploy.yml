@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "POSTGRES_URL=${POSTGRES_URL}"
           echo "AUTH_URL=${AUTH_URL}"
-          # Notera: Undvik att echo:a hemliga värden som AUTH_SECRET
+          # echo "AUTH_SECRET=${AUTH_SECRET}" # Kommentera ut för säkerhet
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 537124949737.dkr.ecr.eu-north-1.amazonaws.com
           docker build --build-arg BUILD_PHASE=true --build-arg POSTGRES_URL=${POSTGRES_URL} --build-arg AUTH_SECRET=${AUTH_SECRET} --build-arg AUTH_URL=${AUTH_URL} -t 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
           docker push 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
