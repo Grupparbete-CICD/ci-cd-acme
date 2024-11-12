@@ -36,8 +36,8 @@ jobs:
           AUTH_URL: http://localhost:3000/api/auth
         run: |
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin  537124949737.dkr.ecr.eu-north-1.amazonaws.com
-          docker build -t  537124949737.dkr.ecr.eu-north-1.amazonaws.com/nextjs-app:latest .
-          docker push  537124949737.dkr.ecr.eu-north-1.amazonaws.com/nextjs-app:latest
+          docker build -t  537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
+          docker push  537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
       # Step 5: Docker Compose Pull & Build
       - name: Docker Compose Pull & Build
         run: |

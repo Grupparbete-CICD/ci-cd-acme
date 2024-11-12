@@ -11,10 +11,10 @@ import {
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
+  connectionString: process.env.POSTGRES_URL || 'postgresql://localhost:5432/postgres',
+  ssl: process.env.NODE_ENV === 'production' ? {
     rejectUnauthorized: false,
-  },
+  } : false
 });
 export async function fetchRevenue() {
   noStore();
