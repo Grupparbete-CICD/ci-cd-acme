@@ -1,35 +1,35 @@
 
 
-  "AWSEBDockerrunVersion": "3",
-  "containerDefinitions": [
-    {
-      "name": "bajskerv",
-      "image": "537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest",
-      "memory": 512,
-      "essential": true,
-      "portMappings": [
+    "AWSEBDockerrunVersion": "3",
+    "containerDefinitions": [
         {
-          "hostPort": 80,
-          "containerPort": 3000
+        "name": "bajskerv",
+        "image": "537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest",
+        "memory": 512,
+        "essential": true,
+        "portMappings": [
+            {
+            "hostPort": 80,
+            "containerPort": 3000
+            }
+        ],
+        "environment": [
+            {
+            "name": "POSTGRES_URL",
+            "value": "postgresql://postgres:Postgres123@database-1.czqq0amk6vo7.eu-north-1.rds.amazonaws.com:5432/postgres"
+            },
+            {
+            "name": "AUTH_SECRET",
+            "value": "${AUTH_SECRET}"
+            },
+            {
+            "name": "AUTH_URL",
+            "value": "${AUTH_URL}"
+            }
+        ]
         }
-      ],
-      "environment": [
-        {
-          "name": "POSTGRES_URL",
-          "value": "postgresql://postgres:Postgres123@database-1.czqq0amk6vo7.eu-north-1.rds.amazonaws.com:5432/postgres"
-        },
-        {
-          "name": "AUTH_SECRET",
-          "value": "${AUTH_SECRET}"
-        },
-        {
-          "name": "AUTH_URL",
-          "value": "${AUTH_URL}"
-        }
-      ]
+    ]
     }
-  ]
-}
 
 
 
