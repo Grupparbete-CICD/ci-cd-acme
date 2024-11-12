@@ -14,12 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Log in to Amazon ECR (om du använder ECR för att lagra Docker-images)
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_BAJS }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      # Log in to Amazon ECR (utan region parameter)
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          region: eu-north-1
 
       # Build and tag Docker image
       - name: Build, tag, and push Docker image
