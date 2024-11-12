@@ -30,7 +30,7 @@ jobs:
       # Build, tag, and push Docker image with a static tag (e.g., latest)
       - name: Build, tag, and push Docker image
         env:
-          AWS_ACCOUNT_ID: 537124949737,
+          AWS_ACCOUNT_ID: 537124949737
         run: |
           IMAGE_TAG=latest  # Static tag
           REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajskerv
