@@ -11,35 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout Source
-      #   uses: actions/checkout@v4
-
-      # - name: Setup Node
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-
-      # - name: Install Dependencies
-      #   run: npm install
-      #   env:
-      #     POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-      #     AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      #     AUTH_URL: ${{ secrets.AUTH_URL }}
-
-      # - name: Genrate Deployment Package
-      #   run: zip -r nodejs-app-build.zip .
-
-      # - name: Deploy to EB
-      #   uses: einaregilsson/beanstalk-deploy@v21
-      #   with:
-      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-      #     aws_secret_key: ${{ secrets.AWS_SECRET }}
-      #     application_name: nextjs-app2
-      #     environment_name: Nextjs-app2-env
-      #     version_label: ${{ github.sha }}
-      #     region: eu-north-1
-      #     deployment_package: nodejs-app-build.zip
-
       - uses: actions/checkout@v4
 
       - name: Generate deployment package
@@ -50,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r deploy.zip .next package.json Procfile -x '*.git*'
+          zip -r deploy.zip .next package.json -x '*.git*'
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
