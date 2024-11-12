@@ -1,0 +1,43 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main  # Ändra till den branch du vill ska trigga deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Log in to Amazon ECR (om du använder ECR för att lagra Docker-images)
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: eu-north-1
+
+      # Build and tag Docker image
+      - name: Build, tag, and push Docker image
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        run: |
+          IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env:$IMAGE_TAG .
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env:$IMAGE_TAG
+
+      # Deploy to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_BAJS }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: Bajs-env
+          environment_name: Bajs-env
+          version_label: ${{ github.sha }}
+          region: eu-north-1
+          image_tag: $IMAGE_TAG

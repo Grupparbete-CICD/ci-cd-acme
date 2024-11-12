@@ -1,0 +1,13 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest",
+        "Update": "true"
+    },
+    "Ports": [
+      {
+        "ContainerPort": "3000"  // Ändra till den port din app lyssnar på om nödvändigt
+      }
+    ]
+  }
+  
