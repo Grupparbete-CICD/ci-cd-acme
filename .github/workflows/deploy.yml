@@ -22,21 +22,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-      # Log in to Amazon ECR (utan region parameter)
+      # Log in to Amazon ECR
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # Build and tag Docker image
+      # Build, tag, and push Docker image
       - name: Build, tag, and push Docker image
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         run: |
           IMAGE_TAG=$(date +%Y%m%d%H%M%S)
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env:$IMAGE_TAG .
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env:$IMAGE_TAG
+          REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.eu-north-1.amazonaws.com/bajs-env
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+          docker push $REPOSITORY_URI:$IMAGE_TAG
 
-      # Deploy to Elastic Beanstalk
+      # Deploy to Elastic Beanstalk and wait for completion
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -46,4 +48,5 @@ jobs:
           environment_name: Bajs-env
           version_label: ${{ github.sha }}
           region: eu-north-1
-          image_tag: $IMAGE_TAG
+          image_tag: ${{ env.IMAGE_TAG }}
+          wait_for_deployment: true
