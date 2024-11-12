@@ -42,12 +42,15 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Generate deployment packageq
+      - name: Generate deployment package
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_URL: ${{ secrets.AUTH_URL }}
-        run: npm run next-install && npm run generate-zip
+        run: |
+          npm install
+          npm run build
+          zip -r deploy.zip .next package.json Procfile -x '*.git*'
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
