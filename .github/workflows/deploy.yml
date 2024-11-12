@@ -40,19 +40,21 @@ jobs:
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_URL: http://localhost:3000/api/auth
         run: |
-          echo "POSTGRES_URL=${POSTGRES_URL}"
-          echo "AUTH_URL=${AUTH_URL}"
-          # echo "AUTH_SECRET=${AUTH_SECRET}" # Kommentera ut för säkerhet
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 537124949737.dkr.ecr.eu-north-1.amazonaws.com
-          docker build --build-arg BUILD_PHASE=true --build-arg POSTGRES_URL=${POSTGRES_URL} --build-arg AUTH_SECRET=${AUTH_SECRET} --build-arg AUTH_URL=${AUTH_URL} -t 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
+          docker build --build-arg BUILD_PHASE=true -t 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
           docker push 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
 
       # Steg 5: Dra och bygg med Docker Compose
       - name: Docker Compose Pull & Build
+        env:
+          POSTGRES_URL: postgresql://postgres:Postgres123@database-1.czqq0amk6vo7.eu-north-1.rds.amazonaws.com:5432/postgres
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_URL: http://localhost:3000/api/auth
         run: |
-          # Dra den senaste imagen från ECR som definierats i docker-compose.yml
+          export POSTGRES_URL=${POSTGRES_URL}
+          export AUTH_SECRET=${AUTH_SECRET}
+          export AUTH_URL=${AUTH_URL}
           docker-compose pull
-          # Bygg tjänsterna definierade i docker-compose.yml
           docker-compose -f docker-compose.yml build
 
       # Steg 6: Förbered Docker Compose Deployment Package
