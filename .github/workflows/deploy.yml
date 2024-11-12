@@ -55,8 +55,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_BAJS }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          application_name: 'Bajs'
-          environment_name: 'Bajs-env'
+          application_name: 'bajs'
+          environment_name: 'bajs-env'
           version_label: ${{ github.sha }}
           region: 'eu-north-1'
           deployment_package: 'docker-compose.zip'
