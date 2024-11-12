@@ -1,19 +1,31 @@
-# Använd Node.js Alpine som basbild
 FROM node:20-alpine
-# Installera Nginx och supervisor
+
+# Install Nginx and supervisor
 RUN apk update && apk add --no-cache nginx supervisor
+
 WORKDIR /app
-# Kopiera package.json och installera beroenden
+
+# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
-# Kopiera hela projektet
+
+# Copy the rest of the application
 COPY . .
-# Bygg Next.js-applikationen
+
+# Set build-time environment variables
+ARG POSTGRES_URL
+ENV POSTGRES_URL=${POSTGRES_URL}
+ENV NODE_ENV=production
+
+# Build the application
 RUN npm run build
-# Kopiera Nginx och supervisor konfiguration
+
+# Copy configuration files
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-# Öppna port 3000
+
+# Expose port
 EXPOSE 3000
-# Starta supervisord som hanterar både Next.js och Nginx
+
+# Start supervisord
 CMD ["/usr/bin/supervisord"]
