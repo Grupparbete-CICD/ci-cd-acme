@@ -5,14 +5,11 @@ import { z } from 'zod';
 import { Client } from 'pg';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-// Create a function to get user by email
+
+// Funktion för att hämta användare baserat på e-post
 async function getUser(email: string): Promise<User | undefined> {
   const client = new Client({
-    host: process.env.POSTGRES_HOST,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
-    port: 5432,
+    connectionString: process.env.POSTGRES_URL,
     ssl: {
       rejectUnauthorized: false,
     },
@@ -31,6 +28,7 @@ async function getUser(email: string): Promise<User | undefined> {
     await client.end();
   }
 }
+
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [

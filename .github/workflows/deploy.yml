@@ -1,9 +1,11 @@
 name: Deploy to Elastic Beanstalk
+
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,49 +14,58 @@ jobs:
       AWS_DEFAULT_REGION: 'eu-north-1'
       ACTIONS_STEP_DEBUG: true
     steps:
-      # Step 1: Checkout the repository
+      # Steg 1: Klona repositoryt
       - name: Checkout repository
         uses: actions/checkout@v4
-      # Step 2: Set AWS Credentials
+
+      # Steg 2: Konfigurera AWS-referenser
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_BAJS }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
-      # Step 3: Install Docker Compose
+
+      # Steg 3: Installera Docker Compose
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
-      # Step 4: Docker Build & Push
+
+      # Steg 4: Bygg och pusha Docker-image
       - name: Docker Build & Push
         env:
           POSTGRES_URL: postgresql://postgres:Postgres123@database-1.czqq0amk6vo7.eu-north-1.rds.amazonaws.com:5432/postgres
-          AUTH_SECRET: ${{secrets.AUTH_SECRET}}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_URL: http://localhost:3000/api/auth
         run: |
-          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin  537124949737.dkr.ecr.eu-north-1.amazonaws.com
-          docker build -t  537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
-          docker push  537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
-      # Step 5: Docker Compose Pull & Build
+          echo "POSTGRES_URL=${POSTGRES_URL}"
+          echo "AUTH_URL=${AUTH_URL}"
+          # Notera: Undvik att echo:a hemliga värden som AUTH_SECRET
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 537124949737.dkr.ecr.eu-north-1.amazonaws.com
+          docker build --build-arg BUILD_PHASE=true --build-arg POSTGRES_URL=${POSTGRES_URL} --build-arg AUTH_SECRET=${AUTH_SECRET} --build-arg AUTH_URL=${AUTH_URL} -t 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest .
+          docker push 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
+
+      # Steg 5: Dra och bygg med Docker Compose
       - name: Docker Compose Pull & Build
         run: |
-          # Pull the latest image from ECR defined in docker-compose.yml
+          # Dra den senaste imagen från ECR som definierats i docker-compose.yml
           docker-compose pull
-          # Build the services defined in docker-compose.yml
+          # Bygg tjänsterna definierade i docker-compose.yml
           docker-compose -f docker-compose.yml build
-      # Step 6: Prepare Docker Compose Deployment Package
+
+      # Steg 6: Förbered Docker Compose Deployment Package
       - name: Prepare Docker Compose Deployment Package
         run: |
           zip -r docker-compose.zip Dockerrun.aws.json docker-compose.yml
-      # Step 7: Deploy to Elastic Beanstalk
+
+      # Steg 7: Deploya till Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_BAJS }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'bajs'
           environment_name: 'bajs-env'
           version_label: ${{ github.sha }}
@@ -62,7 +73,3 @@ jobs:
           deployment_package: 'docker-compose.zip'
           use_existing_version_if_available: true
           wait_for_deployment: true
-
-
-
-
