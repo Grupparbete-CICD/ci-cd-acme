@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r deploy.zip .next package.json -x '*.git*'
+          zip -r deploy.zip .
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
