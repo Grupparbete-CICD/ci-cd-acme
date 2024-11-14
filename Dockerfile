@@ -31,7 +31,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose port 80 for Nginx
-EXPOSE 80
+EXPOSE 3000
 
 # Start Supervisord
 CMD ["/usr/bin/supervisord"]

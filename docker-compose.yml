@@ -3,7 +3,7 @@ services:
   app:
     image: 537124949737.dkr.ecr.eu-north-1.amazonaws.com/bajskerv:latest
     ports:
-      - "80:80"
+      - "3000:3000"
     environment:
       - POSTGRES_URL=postgresql://postgres:Postgres123@database-1.czqq0amk6vo7.eu-north-1.rds.amazonaws.com:5432/postgres
       - AUTH_SECRET=${AUTH_SECRET}
