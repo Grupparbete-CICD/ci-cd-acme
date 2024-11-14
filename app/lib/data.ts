@@ -10,14 +10,31 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL || 'postgresql://localhost:5432/postgres',
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false,
-  } : false
-});
+
+let pool: Pool | undefined;
+
+if (process.env.BUILD_PHASE !== 'true') {
+  pool = new Pool({
+    connectionString:
+      process.env.POSTGRES_URL || 'postgresql://localhost:5432/postgres',
+    ssl:
+      process.env.NODE_ENV === 'production'
+        ? {
+            rejectUnauthorized: false,
+          }
+        : false,
+  });
+}
+
 export async function fetchRevenue() {
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return [];
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -29,8 +46,16 @@ export async function fetchRevenue() {
     throw new Error('Failed to fetch revenue data.');
   }
 }
+
 export async function fetchLatestInvoices() {
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return [];
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     console.log('Fetching latest invoice data...');
     await new Promise((resolve) => setTimeout(resolve, 3200));
@@ -50,8 +75,21 @@ export async function fetchLatestInvoices() {
     throw new Error('Failed to fetch the latest invoices.');
   }
 }
+
 export async function fetchCardData() {
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Return default values during the build
+    return {
+      numberOfCustomers: 0,
+      numberOfInvoices: 0,
+      totalPaidInvoices: formatCurrency(0),
+      totalPendingInvoices: formatCurrency(0),
+    };
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     console.log('Fetching card data...');
     await new Promise((resolve) => setTimeout(resolve, 800));
@@ -82,13 +120,22 @@ export async function fetchCardData() {
     throw new Error('Failed to fetch card data.');
   }
 }
+
 const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return [];
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const invoices = await pool.query<InvoicesTable>(
       `
@@ -119,8 +166,16 @@ export async function fetchFilteredInvoices(
     throw new Error('Failed to fetch invoices.');
   }
 }
+
 export async function fetchInvoicesPages(query: string) {
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Return zero pages during the build
+    return 0;
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const count = await pool.query(
       `
@@ -143,8 +198,16 @@ export async function fetchInvoicesPages(query: string) {
     throw new Error('Failed to fetch total number of invoices.');
   }
 }
+
 export async function fetchInvoiceById(id: string) {
   noStore();
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return null;
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const data = await pool.query<InvoiceForm>(
       `
@@ -168,7 +231,15 @@ export async function fetchInvoiceById(id: string) {
     throw new Error('Failed to fetch invoice.');
   }
 }
+
 export async function fetchCustomers() {
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return [];
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const data = await pool.query<CustomerField>(`
       SELECT
@@ -183,7 +254,15 @@ export async function fetchCustomers() {
     throw new Error('Failed to fetch all customers.');
   }
 }
+
 export async function fetchFilteredCustomers(query: string) {
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return [];
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const data = await pool.query<CustomersTableType>(
       `
@@ -216,7 +295,15 @@ export async function fetchFilteredCustomers(query: string) {
     throw new Error('Failed to fetch customer table.');
   }
 }
+
 export async function getUser(email: string) {
+  if (process.env.BUILD_PHASE === 'true') {
+    // Skip data fetching during the build
+    return null;
+  }
+  if (!pool) {
+    throw new Error('Database pool is not initialized.');
+  }
   try {
     const user = await pool.query<User>(
       'SELECT * FROM users WHERE email = $1',
