@@ -1,7 +1,16 @@
 FROM node:20-alpine
 
-# Install Nginx and supervisor
+# Install Nginx and Supervisor
 RUN apk update && apk add --no-cache nginx supervisor
+
+# Add non-root users for Nginx and Node.js
+RUN adduser -D -g 'nginx user' nginx
+RUN adduser -D -g 'node user' node
+
+# Create necessary directories for logs and set permissions
+RUN mkdir -p /var/log/nginx /var/log/node && \
+    chown -R nginx:nginx /var/log/nginx && \
+    chown -R node:node /var/log/node
 
 WORKDIR /app
 
@@ -25,8 +34,8 @@ RUN npm run build
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Expose port
-EXPOSE 3000
+# Expose port 80 for Nginx
+EXPOSE 80
 
-# Start supervisord
+# Start Supervisord
 CMD ["/usr/bin/supervisord"]
