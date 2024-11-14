@@ -3,10 +3,6 @@ FROM node:20-alpine
 # Install Nginx and Supervisor
 RUN apk update && apk add --no-cache nginx supervisor
 
-# Add non-root users for Nginx and Node.js
-RUN adduser -D -g 'nginx user' nginx
-RUN adduser -D -g 'node user' node
-
 # Create necessary directories for logs and set permissions
 RUN mkdir -p /var/log/nginx /var/log/node && \
     chown -R nginx:nginx /var/log/nginx && \
