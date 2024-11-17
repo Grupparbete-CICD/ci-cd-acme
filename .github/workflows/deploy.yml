@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r deploy.zip . -x ".git/*" ".idea/*" "scripts/*" ".github/*" "node_modules/*"
+          zip -r deploy.zip .next package.json package-lock.json
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
@@ -42,8 +42,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET }}
-          application_name: nextjs-app2
-          environment_name: Nextjs-app2-env
-          version_label: nextjs-app-${{ steps.format-time.outputs.replaced }}
+          application_name: acme-qwe
+          environment_name: Acme-qwe-env
+          version_label: nextjs-qwe-${{ steps.format-time.outputs.replaced }}
           region: eu-north-1
           deployment_package: deploy.zip
