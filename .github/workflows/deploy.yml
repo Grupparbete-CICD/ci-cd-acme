@@ -1,10 +1,10 @@
 name: Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'lowe-dev'
-  workflow_dispatch:
 
 jobs:
   build:
@@ -43,7 +43,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET }}
           application_name: nextjs-acme
-          environment_name: Nextjs-acme-env
+          environment_name: Nextjs-acme-env-1
           version_label: nextjs-acme-${{ steps.format-time.outputs.replaced }}
           region: eu-north-1
           deployment_package: deploy.zip
