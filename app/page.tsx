@@ -20,6 +20,7 @@ export default function Page() {
           >
             Styled paragraph with next/font!
           </p>
+          <p>Added new database</p>
           <p className={`text-xl text-gray-800 md:text-3xl md:leading-normal`}>
             <strong>Welcome to Acme.</strong> This is the example for the{' '}
             <a href="https://nextjs.org/learn/" className="text-blue-500">
@@ -50,9 +51,6 @@ export default function Page() {
             className="block md:hidden"
             alt="Screenshots of the dashboard project showing mobile version"
           />
-          <div>
-            <p>Lowe - Test</p>
-          </div>
         </div>
       </div>
     </main>
